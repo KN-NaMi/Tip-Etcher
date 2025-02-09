@@ -1,4 +1,4 @@
-# Tip Etcher License and Copyright Notices
+Tip Etcher License and Copyright Notices
 
 Tip Etcher is (c) by KN NaMi
 
@@ -6,14 +6,14 @@ This notice must be included in any distributions of this project or derivative 
 
 Because this project consists of many types of source, individual parts of the project are made available under different licenses:
 
-1. **Hardware Designs**
-   - The hardware designs located in `./pcb/` and `./cad` are available under the **CERN-OHL-W v2 license**.
-   - Full text is available at: [https://ohwr.org/cern_ohl_w_v2.pdf](https://ohwr.org/cern_ohl_w_v2.pdf).
+1. Hardware Designs
+   - The hardware designs located in ./pcb/ and ./cad are available under the CERN-OHL-W v2 license.
+   - Full text is available at: https://ohwr.org/cern_ohl_w_v2.pdf
 
-2. **Firmware**
-   - The software located in `./firmware/` is available under the **Mozilla MPL v2.0 license**.
-   - Full text is available at: [https://www.mozilla.org/en-US/MPL/2.0/](https://www.mozilla.org/en-US/MPL/2.0/).
+2. Firmware
+   - The software located in ./firmware/ is available under the Mozilla MPL v2.0 license.
+   - Full text is available at: https://www.mozilla.org/en-US/MPL/2.0/
 
-## General Notice
+General Notice
 If you contribute to this project, you agree that your contributions will be licensed under the same terms as the respective folder they belong to.
 
