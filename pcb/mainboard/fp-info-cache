@@ -1,4 +1,4 @@
-24283660119095224
+24287143756206216
 AD633JRZ-R7
 SOIC127P600X175-8N
 
@@ -82306,6 +82306,13 @@ Zetex SM8
 8
 8
 Package_SON
+DDA8_3X2P13
+
+TPS54331DDA 
+0
+9
+9
+Package_SON
 Diodes_PowerDI3333-8
 Diodes Incorporated PowerDI3333-8, Plastic Dual Flat No Lead Package, 3.3x3.3x0.8mm Body, https://www.diodes.com/assets/Package-Files/PowerDI3333-8.pdf
 PowerDI 0.65
@@ -84034,6 +84041,13 @@ TO-46-4 LM399
 0
 4
 4
+Package_TO_SOT_THT
+CDIP1016W62P254L4160H372Q22
+WDIP22-G-400-2.54H
+Integrated Circuit
+0
+22
+22
 Package_TO_SOT_THT
 Fairchild_TO-220F-6L
 Fairchild TO-220F-6L, http://www.mouser.com/ds/2/149/FSL136MRT-113334.pdf
