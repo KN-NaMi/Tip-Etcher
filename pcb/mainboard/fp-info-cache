@@ -1,4 +1,4 @@
-24287143756206216
+24288887053944112
 AD633JRZ-R7
 SOIC127P600X175-8N
 
@@ -6565,6 +6565,13 @@ banana socket
 0
 3
 3
+Connector
+CONN_3220-10-0100-00_CNC
+
+3220-10-0100-00 
+0
+10
+10
 Connector
 CUI_PD-30
 3 pin connector, PD-30, http://www.cui.com/product/resource/pd-30.pdf
