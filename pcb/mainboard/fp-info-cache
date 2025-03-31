@@ -1,4 +1,4 @@
-24288887053944112
+24294117143174643
 AD633JRZ-R7
 SOIC127P600X175-8N
 
@@ -6656,6 +6656,13 @@ connector side-entry ATA PATA IDE 5.25 inch floppy drive power
 0
 6
 5
+Connector
+MODULE_TMC2208_SILENTSTEPSTICK
+
+
+0
+19
+19
 Connector
 NS-Tech_Grove_1x04_P2mm_Vertical
 https://statics3.seeedstudio.com/images/opl/datasheet/3470130P1.pdf
@@ -57757,6 +57764,13 @@ Inductor
 2
 2
 Inductor_SMD
+IND_IHLP-2525CZ_VIS-M
+
+IHLP2525CZER6R8M11 
+0
+2
+2
+Inductor_SMD
 L_6.3x6.3_H3
 Choke, SMD, 6.3x6.3mm 3mm height
 Choke SMD
@@ -65176,6 +65190,13 @@ DFN-14_DE
 0
 15
 15
+Library
+PEC11R4220FS0024
+PEC11R-4220F-S0024-2
+Variable Resistor
+0
+7
+7
 Module
 A20_OLINUXINO_LIME2
 A20 Olinuxino LIME2, 1.2GHz, 512-1024MB RAM, Micro-SD, NAND or eMMC, 1000Mbit Ethernet
