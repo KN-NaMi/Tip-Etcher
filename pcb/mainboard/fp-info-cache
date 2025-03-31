@@ -1,4 +1,4 @@
-24283660119095224
+24294117143174643
 AD633JRZ-R7
 SOIC127P600X175-8N
 
@@ -6566,6 +6566,13 @@ banana socket
 3
 3
 Connector
+CONN_3220-10-0100-00_CNC
+
+3220-10-0100-00 
+0
+10
+10
+Connector
 CUI_PD-30
 3 pin connector, PD-30, http://www.cui.com/product/resource/pd-30.pdf
 connector 3-pin PD-30 power DIN
@@ -6649,6 +6656,13 @@ connector side-entry ATA PATA IDE 5.25 inch floppy drive power
 0
 6
 5
+Connector
+MODULE_TMC2208_SILENTSTEPSTICK
+
+
+0
+19
+19
 Connector
 NS-Tech_Grove_1x04_P2mm_Vertical
 https://statics3.seeedstudio.com/images/opl/datasheet/3470130P1.pdf
@@ -57750,6 +57764,13 @@ Inductor
 2
 2
 Inductor_SMD
+IND_IHLP-2525CZ_VIS-M
+
+IHLP2525CZER6R8M11 
+0
+2
+2
+Inductor_SMD
 L_6.3x6.3_H3
 Choke, SMD, 6.3x6.3mm 3mm height
 Choke SMD
@@ -65169,6 +65190,13 @@ DFN-14_DE
 0
 15
 15
+Library
+PEC11R4220FS0024
+PEC11R-4220F-S0024-2
+Variable Resistor
+0
+7
+7
 Module
 A20_OLINUXINO_LIME2
 A20 Olinuxino LIME2, 1.2GHz, 512-1024MB RAM, Micro-SD, NAND or eMMC, 1000Mbit Ethernet
@@ -82306,6 +82334,13 @@ Zetex SM8
 8
 8
 Package_SON
+DDA8_3X2P13
+
+TPS54331DDA 
+0
+9
+9
+Package_SON
 Diodes_PowerDI3333-8
 Diodes Incorporated PowerDI3333-8, Plastic Dual Flat No Lead Package, 3.3x3.3x0.8mm Body, https://www.diodes.com/assets/Package-Files/PowerDI3333-8.pdf
 PowerDI 0.65
@@ -84034,6 +84069,13 @@ TO-46-4 LM399
 0
 4
 4
+Package_TO_SOT_THT
+CDIP1016W62P254L4160H372Q22
+WDIP22-G-400-2.54H
+Integrated Circuit
+0
+22
+22
 Package_TO_SOT_THT
 Fairchild_TO-220F-6L
 Fairchild TO-220F-6L, http://www.mouser.com/ds/2/149/FSL136MRT-113334.pdf
