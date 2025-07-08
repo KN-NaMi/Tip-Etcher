@@ -5193,6 +5193,12 @@
 		(uuid "08033360-4be1-42d1-8e69-9c5314f7009e")
 	)
 	(junction
+		(at 72.39 49.53)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "08206599-3a5c-42a4-8039-c324d3134925")
+	)
+	(junction
 		(at 67.31 113.03)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5511,10 +5517,6 @@
 		(uuid "faa61132-20f2-4b91-9022-45039e8cda8d")
 	)
 	(no_connect
-		(at 74.93 50.8)
-		(uuid "092e95ac-a8a0-4cae-80a7-e05684b8ce00")
-	)
-	(no_connect
 		(at 264.16 129.54)
 		(uuid "0cf7de29-3b55-421b-b717-0761e809a693")
 	)
@@ -5525,10 +5527,6 @@
 	(no_connect
 		(at 54.61 91.44)
 		(uuid "279c987f-b781-46f6-915a-c8a8139d7cbf")
-	)
-	(no_connect
-		(at 72.39 50.8)
-		(uuid "2c2b0953-f1c7-4869-b4fb-027d820129f4")
 	)
 	(no_connect
 		(at 90.17 64.77)
@@ -6009,6 +6007,16 @@
 			(type default)
 		)
 		(uuid "27042f26-dbeb-4dce-b554-4003f6cf584c")
+	)
+	(wire
+		(pts
+			(xy 72.39 50.8) (xy 72.39 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "27bf20db-2a38-4f59-ad6e-08030c18f78c")
 	)
 	(wire
 		(pts
@@ -6922,6 +6930,26 @@
 	)
 	(wire
 		(pts
+			(xy 74.93 50.8) (xy 74.93 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a1333581-a614-4662-937b-2580d1adb06c")
+	)
+	(wire
+		(pts
+			(xy 72.39 38.1) (xy 77.47 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a165c7ee-f211-4b24-a7e5-f9bce736eadf")
+	)
+	(wire
+		(pts
 			(xy 367.03 49.53) (xy 367.03 50.8)
 		)
 		(stroke
@@ -7039,6 +7067,16 @@
 			(type default)
 		)
 		(uuid "a8b26500-69f3-41e5-bcec-fd1a9bbc70f9")
+	)
+	(wire
+		(pts
+			(xy 74.93 49.53) (xy 72.39 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aa43a223-1388-4b22-b73d-defb89883cdd")
 	)
 	(wire
 		(pts
@@ -7219,16 +7257,6 @@
 			(type default)
 		)
 		(uuid "baf37e46-0cb4-4333-b8af-cedee06609ae")
-	)
-	(wire
-		(pts
-			(xy 143.51 45.72) (xy 144.78 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bc335fc2-8edb-4bf1-b2bf-65e2e3e95adb")
 	)
 	(wire
 		(pts
@@ -7639,6 +7667,16 @@
 			(type default)
 		)
 		(uuid "f29ad320-cac5-4bc7-917b-eb0a47e64b83")
+	)
+	(wire
+		(pts
+			(xy 72.39 49.53) (xy 72.39 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f48e7977-3809-4ede-84de-41d470c2a52e")
 	)
 	(wire
 		(pts
@@ -8965,6 +9003,28 @@
 			)
 		)
 	)
+	(global_label "OLED_3V3"
+		(shape output)
+		(at 77.47 38.1 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify left)
+		)
+		(uuid "67bc4b2f-0696-4eeb-99f8-14dcd11ae9de")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 89.708 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "STEP_2"
 		(shape input)
 		(at 54.61 57.15 180)
@@ -9473,6 +9533,28 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "OLED_3V3"
+		(shape input)
+		(at 144.78 45.72 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 0.889 0.889)
+			)
+			(justify right)
+		)
+		(uuid "d2169049-af11-441c-821a-053f708e47db")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 132.542 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 				(hide yes)
 			)
 		)
@@ -10604,7 +10686,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+3.3VA"
+		(property "Value" "+3.3V"
 			(at 64.77 44.704 0)
 			(effects
 				(font
@@ -13960,71 +14042,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3.3V")
-		(at 143.51 45.72 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "aac4691b-db6c-43e8-8833-225f7412c3cc")
-		(property "Reference" "#PWR025"
-			(at 147.32 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3.3V"
-			(at 137.922 45.72 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 143.51 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 143.51 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 143.51 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "0f36cd9c-b1aa-4ac5-be4e-ede711bc8387")
-		)
-		(instances
-			(project "mainboard"
-				(path "/3cc6bd18-2206-4063-bceb-a55988771b5a"
-					(reference "#PWR025")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "TPS54331DDA:TPS54331DDA")
 		(at 63.5 199.39 0)
 		(unit 1)
@@ -16106,7 +16123,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+3.3VA"
+		(property "Value" "+3.3V"
 			(at 80.01 44.704 0)
 			(effects
 				(font
