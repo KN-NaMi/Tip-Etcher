@@ -1,0 +1,16 @@
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:43:6:set_buffer_size	16	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:58:6:fill_buffer	24	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:85:6:draw_pixel	24	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:117:6:draw_vline	32	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:152:6:draw_hline	32	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:189:6:draw_line	48	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:277:6:draw_AA_line	120	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:390:6:draw_rect	32	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:415:6:draw_rect_filled	32	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:441:6:draw_circle	40	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:499:6:draw_bitmap_8bpp	32	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:534:6:draw_bitmap_4bpp	40	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:571:6:select_font	16	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:593:6:draw_char	48	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:655:6:draw_text	32	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_GFX.c:683:6:send_buffer_to_OLED	16	static
