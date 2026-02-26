@@ -69,12 +69,16 @@ static void MX_I2C1_Init(void);
 
 // TIP ETCHER VARIBLES
 
-uint16_t var_etchTime = 60; // s
-uint16_t var_depth = 5; // mm
-uint16_t var_step = 20; // um
+uint16_t var_etchTime = 60;   // s
+uint16_t var_depth    = 5000; // um
+uint16_t var_step     = 20;   // um
+uint16_t var_polishTime = 0; // ms
 
 uint16_t etchTime_cnt = 0;
 uint16_t stepTime_cnt = 0;
+
+uint16_t polishTime_cnt = 0;
+int etchStartPosition = 0;
 
 //
 
@@ -106,6 +110,7 @@ typedef struct Motor {
     uint16_t step_pin;
 } Motor;
 
+// 23.2u / krok
 Motor Motor1 = {0, 0, DIR_1_GPIO_Port, DIR_1_Pin, STEP_1_GPIO_Port, STEP_1_Pin};
 Motor Motor2 = {0, 0, DIR_2_GPIO_Port, DIR_2_Pin, STEP_2_GPIO_Port, STEP_2_Pin};
 
@@ -118,11 +123,12 @@ void etching_enable(State *state, Clickable *clickable);
 
 void led_toggle(State *state, Clickable *clickable);
 void etching_start_stop(State *state, Clickable *clickable);
-void settings_max_amp(State *state, Clickable *clickable);
+void settings_toggle_cursor(State *state, Clickable *clickable);
+void settings_voltage_select(State *state, Clickable *clickable);
 void Update_Menu();
 void Update_Settings();
 void Update_Manual();
-void home_motor2();
+void Motor2_Home();
 
 void Update_Debug();
 
@@ -130,6 +136,21 @@ void Update_Debug();
 void INA219_Init();
 
 void INA219_ReadCurrent();
+
+// =======================================================
+
+void Tip_Enable() {
+	HAL_GPIO_WritePin(TIP_EN_GPIO_Port, TIP_EN_Pin, 1);
+}
+void Tip_Disable() {
+	HAL_GPIO_WritePin(TIP_EN_GPIO_Port, TIP_EN_Pin, 0);
+}
+void Tip_5V() {
+	HAL_GPIO_WritePin(V_SELECT_GPIO_Port, V_SELECT_Pin, 0);
+}
+void Tip_24V() {
+	HAL_GPIO_WritePin(V_SELECT_GPIO_Port, V_SELECT_Pin, 1);
+}
 
 // ETCHING ===============================================
 
@@ -140,27 +161,40 @@ uint16_t currentValue = 0;
 
 double currentValue2 = 0;
 double currentMiliAmp = 0;
+double minCurrentMiliAmp = 0.4;
+
+double Tip_Current() {
+	return currentMiliAmp;
+}
 
 uint8_t frame[2] = {0, 0};
 
 enum Etching_States {
-	None, // Wait
-	ResetDevice,
-	LowerHead,
-	HomeBeforePreperation,
-	PrepareTip,
-	DiveTip,
-	Etch,
-	LowerTip,
-	LiftHead,
-	LowerHeadAndEtch
+	None,
+	IDLE,
+	HEAD_DOWN,
+	TIP_DOWN,
+	TIP_EXTEND,
+	HOMING,
+	APPROACH,
+	DIVE,
+	ETCH,
+	POLISH
 };
 
 enum Etching_States currentEtchingState = None;
-enum Etching_States nextEtchingState;
+enum Etching_States nextEtchingState    = None;
 
 void StateTransision(uint8_t nextState) {
 	currentEtchingState = nextState;
+}
+
+int SelectState(enum Etching_States state) {
+	if(nextEtchingState == state && nextEtchingState != currentEtchingState) {
+		currentEtchingState = nextEtchingState;
+		NAL_NaMiMenu_OLED_Update();
+		return 1;
+	} return 0;
 }
 
 // MENU ===============================================
@@ -197,15 +231,17 @@ Clickable manual_clickable[] = {
 	{NONE, &NAL_NaMiMenu_Cursor_toggle_freeze, "Motor1"},
 	{NONE, &NAL_NaMiMenu_Cursor_toggle_freeze, "Motor2"},
 	{NONE, &etching_enable, "Etch. En."},
-	{NONE, &home_motor2, "Home Motor2"},
+	{NONE, &Motor2_Home, "Home Motor2"},
 	{Menu, NULL, "Back"}
 };
 
 Clickable settings_clickable[] = {
-	{NONE, &settings_max_amp, "Etching time"},
-	{NONE, &settings_max_amp, "Depth"},
-	{NONE, &settings_max_amp, "Step"},
-	{NONE, &settings_max_amp, "Max current"},
+	{NONE, &settings_toggle_cursor, "Etching time"},
+	{NONE, &settings_toggle_cursor, "Depth"},
+	{NONE, &settings_toggle_cursor, "Step"},
+	{NONE, &settings_voltage_select, "voltage"},
+	{NONE, &settings_toggle_cursor, "Polish time"},
+	{NONE, &settings_toggle_cursor, "Max current"},
 	{Menu, NULL, "Back"}
 };
 
@@ -216,9 +252,13 @@ State states[] = {
 	{Debug, &Update_Debug, debug_clickable, ARRAY_SIZE(debug_clickable)}
 };
 
-void Update_Debug() {
+int voltageSelection = 0;
 
+void settings_voltage_select(State *state, Clickable *clickable) {
+	voltageSelection = !voltageSelection;
 }
+
+void Update_Debug() { }
 
 void Update_Menu() {
 
@@ -240,7 +280,6 @@ void Update_Menu() {
 
 	if(nanoAmp < 0)
 		nanoAmp = 0;
-
 
 	if(nanoAmp >= 100)
 		sprintf(nanoAmpText, "%d", nanoAmp);
@@ -275,14 +314,23 @@ void Update_Settings() {
 	sprintf(text1, "%d s", var_etchTime);
 	NAL_draw_text_in_grid(text1, 8, 0, 5);
 	// Depth
-	sprintf(text1, "%d mm", var_depth);
+	sprintf(text1, "%d um", var_depth);
 	NAL_draw_text_in_grid(text1, 8, 1, 5);
 	// Step
 	sprintf(text1, "%d um", var_step);
 	NAL_draw_text_in_grid(text1, 8, 2, 5);
+	// Voltage Selection
+	if(voltageSelection) {
+		NAL_draw_text_in_grid("5 V", 8, 3, 5);
+	} else {
+		NAL_draw_text_in_grid("24 V", 8, 3, 5);
+	}
 	// Max current
-	sprintf(text1, "%d mA", var_current);
-	NAL_draw_text_in_grid(text1, 8, 3, 5);
+	//sprintf(text1, "%d mA", var_current);
+	//NAL_draw_text_in_grid(text1, 8, 3, 5);
+	// Polish time
+	sprintf(text1, "%d ms", var_polishTime);
+	NAL_draw_text_in_grid(text1, 12, 0, 5);
 }
 
 void Update_Manual() {
@@ -307,7 +355,7 @@ void Update_Manual() {
 	NAL_draw_text_in_grid("Electrode", 9, 3, 5);
 }
 
-void home_motor2() {
+void Motor2_Home() {
 	Motor2.setPos = 10000;
 }
 
@@ -331,7 +379,7 @@ void etching_start_stop(State *state, Clickable *clickable) {
 	if(etching) {
 		//clickable->text = "Stop";
 		//NAL_NaMiMenu_Cursor_freeze();
-		currentEtchingState = LowerHead;
+		//currentEtchingState = HEAD_DOWN;
 		motor1Pos = Motor1.setPos;
 	}
 	else {
@@ -340,7 +388,7 @@ void etching_start_stop(State *state, Clickable *clickable) {
 	}
 }
 
-void settings_max_amp(State *state, Clickable *clickable) {
+void settings_toggle_cursor(State *state, Clickable *clickable) {
 	NAL_NaMiMenu_Cursor_toggle_freeze();
 }
 
@@ -353,14 +401,17 @@ void NAL_FrozenCursorMove_Callback(State *state, Clickable *clickable) {
 			var_etchTime = NAL_NaMiMenu_CursorDir() ? var_etchTime + 1 : var_etchTime - 1;
 			break;
 		case 1: // Depth
-			var_depth = NAL_NaMiMenu_CursorDir() ? var_depth + 1 : var_depth - 1;
+			var_depth = NAL_NaMiMenu_CursorDir() ? var_depth + 100 : var_depth - 100;
 			break;
 		case 2: // Step
 			var_step = NAL_NaMiMenu_CursorDir() ? var_step + 5 : var_step - 5;
 			break;
-		case 3: // Max current
+		case 5: // Max current
 			//if(NAL_NaMiMenu_CursorDir()) { var_current++; } else { var_current--; }
 			var_current = NAL_NaMiMenu_CursorDir() ? var_current + 1 : var_current - 1;
+			break;
+		case 4: // Polish time
+			var_polishTime = NAL_NaMiMenu_CursorDir() ? var_polishTime + 10 : var_polishTime - 10;
 			break;
 		}
 	}
@@ -376,9 +427,9 @@ void NAL_FrozenCursorMove_Callback(State *state, Clickable *clickable) {
 
 		if(NAL_NaMiMenu_CursorPos() == 3) {
 			if(NAL_NaMiMenu_CursorDir()) {
-				Motor2.setPos += 100;
+				Motor2.setPos += 10;
 			} else {
-				Motor2.setPos -= 100;
+				Motor2.setPos -= 10;
 			}
 		}
 	}
@@ -426,33 +477,47 @@ uint16_t tim_cnt = 0;
 uint16_t debounce = 0;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-	if(htim == &htim2) {
+	if(htim == &htim2) { // Updates every 2 ms
 
 		debounce++;
 
-		if(currentEtchingState == LowerHeadAndEtch)
+		if(currentEtchingState == ETCH)
 			etchingTime++;
 
 		tim_cnt++;
-		if((tim_cnt >= 125) && (NAL_NaMiMenu_CurrentState()->state != NONE)) {
+		if((tim_cnt >= 250) && HAL_GPIO_ReadPin(TIP_EN_GPIO_Port, TIP_EN_Pin)) {
 			//NAL_NaMiMenu_OLED_Update();
-			if(HAL_GPIO_ReadPin(TIP_EN_GPIO_Port, TIP_EN_Pin)) {
+			if(currentEtchingState == ETCH || currentEtchingState == IDLE) {
 				INA219_ReadCurrent();
-				if(currentEtchingState == Etch)
-					NAL_NaMiMenu_OLED_Update();
+				NAL_NaMiMenu_OLED_Update();
 			}
 			tim_cnt = 0;
 		}
 
-		if(etching && currentEtchingState == Etch) { // Updates every 2 ms
+		if(etching && currentEtchingState == ETCH) {
 			etchTime_cnt++;
 			stepTime_cnt++;
+		}
+
+		if(currentEtchingState == POLISH && Motor2.pos == etchStartPosition) {
+			polishTime_cnt++;
 		}
 
 		MoveMotor(&Motor1);
 
 		MoveMotor(&Motor2);
 	}
+}
+
+int Motor2_MaxPos() {
+	return Motor2.pos <= -2400;
+}
+
+int M1startingPos = 0;
+int M1maxPos = 12; // mm
+
+int Motor1_MaxPos() {
+	return Motor1.pos >= M1startingPos + ((double)(M1maxPos) / 0.0232);
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -468,7 +533,7 @@ void INA219_Init() {
     uint8_t calibration[2];
     uint16_t cal;
 
-    double R_SHUNT = 0.33;  // Ω
+    double R_SHUNT = 0.16; // 0.33;  // Ω
     double maxAmp = 0.3;    //
 
     double current_lsb = maxAmp / 32767.0;
@@ -549,7 +614,7 @@ int main(void)
   NAL_NaMiMenu_setMenuStates(states, sizeof(states) / sizeof(State));
   NAL_NaMiMenu_Encoder_setup(ENCODER_BTN_GPIO_Port, ENCODER_BTN_Pin, ENCODER_SIGA_GPIO_Port, ENCODER_SIGA_Pin, ENCODER_SIGB_GPIO_Port, ENCODER_SIGB_Pin);
 
-  NAL_NaMiMenu_splash_screen("Tip Etcher", "v2.0 | in dev");
+  NAL_NaMiMenu_splash_screen("Tip Etcher", "v2.2 | in dev");
 
   // Device initialization
 
@@ -567,7 +632,7 @@ int main(void)
   //if(!HAL_GPIO_ReadPin(LIMIT_SWITCH_1_GPIO_Port, LIMIT_SWITCH_1_Pin))
 	  //;//NAL_NaMiMenu_Cursor_freeze();
 
-  home_motor2();
+  //Motor2_Home();
 
   /* USER CODE END 2 */
 
@@ -575,101 +640,140 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-
-	  if(etching) {
+	  if(etching)
 		  INA219_ReadCurrent();
 
-		  switch(currentEtchingState) {
+	  switch(nextEtchingState) {
 
-		  case LowerHead:
-
+	  case IDLE:
+		  if(SelectState(IDLE)) {
+			  Tip_Disable();
+			  Tip_5V();
+			  Motor2_Home();
 			  etchTime_cnt = 0;
-			  stepTime_cnt = 0;
-
-			  Motor2.setPos = -2400;
-			  HAL_GPIO_WritePin(V_SELECT_GPIO_Port, V_SELECT_Pin, 0);
-			  HAL_GPIO_WritePin(TIP_EN_GPIO_Port, TIP_EN_Pin, 1);
-
-			  if(Motor2.pos == -2400) {
-				  Motor1.setPos += 1;
-			  }
-
-			  if(currentMiliAmp > 0.4) {
-
-				  for(int i = 0; i < sizeof(test_chart_data)/sizeof(double); i++) {
-					  test_chart_data[i] = 0;
-				  }
-
-				  Motor2.setPos = Motor2.pos;
-				  HAL_GPIO_WritePin(TIP_EN_GPIO_Port, TIP_EN_Pin, 0);
-				  currentEtchingState = HomeBeforePreperation;
-			  }
-
-			  break;
-		  case HomeBeforePreperation:
-			  Motor2.setPos = 10000;
-
-			  if(!HAL_GPIO_ReadPin(LIMIT_SWITCH_1_GPIO_Port, LIMIT_SWITCH_1_Pin)) {
-				  currentEtchingState = PrepareTip;
-			  }
-
-			  break;
-		  case PrepareTip:
-			  HAL_GPIO_WritePin(V_SELECT_GPIO_Port, V_SELECT_Pin, 0);
-			  HAL_GPIO_WritePin(TIP_EN_GPIO_Port, TIP_EN_Pin, 1);
-
-			  Motor2.setPos = -2400;
-
-			  if(currentMiliAmp > 0.4) {
-				  HAL_GPIO_WritePin(TIP_EN_GPIO_Port, TIP_EN_Pin, 0);
-
-				  Motor2.setPos = Motor2.pos - (double)(var_depth) / 0.005;
-
-				  currentEtchingState = DiveTip;
-			  }
-
-			  break;
-		  case DiveTip:
-
-			  if(Motor2.setPos == Motor2.pos) {
-				  currentEtchingState = Etch;
-			  }
-
-			  break;
-		  case Etch:
-			  HAL_GPIO_WritePin(V_SELECT_GPIO_Port, V_SELECT_Pin, 1);
-			  HAL_GPIO_WritePin(TIP_EN_GPIO_Port, TIP_EN_Pin, 1);
-
-			  if(stepTime_cnt * 2 >= ((double)(var_step) / (double)(var_depth * 1000.0)) * (var_etchTime * 1000.0)) {
-				  stepTime_cnt = 0;
-				  Motor2.setPos += var_step / 5;
-			  }
-
-			  if(etchTime_cnt * 2 >= var_etchTime * 1000) {
-				  HAL_GPIO_WritePin(TIP_EN_GPIO_Port, TIP_EN_Pin, 0);
-				  HAL_GPIO_WritePin(V_SELECT_GPIO_Port, V_SELECT_Pin, 0);
-				  Motor2.setPos = 10000;
-				  currentEtchingState = NONE;
-			  }
-
-			  break;
-		  default:
-		  case None:
-			  HAL_GPIO_WritePin(TIP_EN_GPIO_Port, TIP_EN_Pin, 0);
-			  HAL_GPIO_WritePin(V_SELECT_GPIO_Port, V_SELECT_Pin, 0);
-			  etchingTime = 0;
 			  etching = 0;
+			  Motor1.setPos = M1startingPos;
+		  }
+		  // Klinkięto "Start"
+		  if(etching) { nextEtchingState = HEAD_DOWN; M1startingPos = Motor1.pos; }
+		  break;
 
-			  NAL_NaMiMenu_OLED_Update();
-			  break;
+	  case HEAD_DOWN:
+		  if(SelectState(HEAD_DOWN)) {
+			  Tip_5V();
+			  Tip_Enable();
 		  }
+		  // Wykryto taflę cieczy (przepływa prąd).
+		  if(Tip_Current() > minCurrentMiliAmp) { nextEtchingState = TIP_EXTEND; }
+		  // Osiągnięto pozycję maksymalną M2.
+		  if(Motor2_MaxPos()) { nextEtchingState = TIP_DOWN; }
+
+		  if(Motor2.pos == Motor2.setPos) {
+			  Motor2.setPos -= 1;
+		  }
+		  break;
+
+	  case TIP_DOWN:
+		  if(SelectState(TIP_DOWN)) {
+			  Tip_5V();
+			  Tip_Enable();
+		  }
+		  if(Motor1.pos == Motor1.setPos) {
+			  Motor1.setPos += 1;
+		  }
+		  // Wykryto taflę cieczy (przepływa prąd).
+		  if(Tip_Current() > minCurrentMiliAmp) { nextEtchingState = TIP_EXTEND; }
+		  // Osiągnięto pozycję maksymalną M1.
+		  if(Motor1_MaxPos()) { nextEtchingState = IDLE; }
+		  break;
+
+	  case TIP_EXTEND:
+		  if(SelectState(TIP_EXTEND)) {
+			  Tip_5V();
+			  Tip_Disable();
+			  Motor1.setPos += ((double)(var_depth + 500) / 23.2);
+		  }
+		  // Osiągnięto pozycję maksymalną M1.
+		  if(Motor1_MaxPos()) { nextEtchingState = IDLE; }
+		  if(Motor1.pos >= M1startingPos + ((double)(var_depth) / 23.2)) { nextEtchingState = HOMING; }
+		  break;
+
+	  case HOMING:
+		  if(SelectState(HOMING)) {
+			  Tip_Disable();
+			  Motor2_Home();
+		  }
+		  if(Motor2.pos == 0) { nextEtchingState = APPROACH; }
+		  break;
+
+	  case APPROACH:
+		  if(SelectState(APPROACH)) {
+			  Tip_5V();
+			  Tip_Enable();
+		  }
+		  // Wykryto taflę cieczy (przepływa prąd).
+		  if(Tip_Current() > minCurrentMiliAmp) { nextEtchingState = DIVE; }
+
+		  if(Motor2.pos == Motor2.setPos && !Motor2_MaxPos()) {
+			  Motor2.setPos -= 1;
+		  }
+		  break;
+
+	  case DIVE:
+		  if(SelectState(DIVE)) {
+			  Tip_5V();
+			  Tip_Disable();
+			  Motor2.setPos = Motor2.pos - (double)(var_depth) / 5.0;
+		  }
+		  if(Motor2.pos == Motor2.setPos) { nextEtchingState = ETCH; }
+		  break;
+
+	  case ETCH:
+		  if(SelectState(ETCH)) {
+			  if(voltageSelection)
+				  Tip_5V();
+			  else
+				  Tip_24V();
+			  Tip_Enable();
+			  etchStartPosition = Motor2.pos;
+		  }
+		  if(stepTime_cnt * 2 >= ((double)(var_step) / (double)(var_depth * 1.0)) * (var_etchTime * 1000.0)) {
+			  stepTime_cnt = 0;
+			  Motor2.setPos += (double)(var_step) / 5;
+		  }
+
+		  if(etchTime_cnt * 2 >= var_etchTime * 1000.0) {
+			  if(var_polishTime > 0)
+				  nextEtchingState = POLISH;
+			  else
+				  nextEtchingState = IDLE;
+		  }
+		  break;
+	  case POLISH:
+		  if(SelectState(POLISH)) {
+			  Motor2.setPos = etchStartPosition;
+			  Tip_Disable();
+		  }
+
+		  if(Motor2.pos == etchStartPosition) {
+			  if(polishTime_cnt * 2 >= var_polishTime) {
+				  nextEtchingState = IDLE;
+			  } else {
+				  Tip_24V();
+				  Tip_Enable();
+			  }
+		  }
+
+		  break;
+	  default:
+	  case None:
+		  NAL_NaMiMenu_OLED_Update();
+		  nextEtchingState = IDLE;
+		  break;
 	  }
-	  else {
-		  if(currentEtchingState != None) {
-			  currentEtchingState = None;
-			  home_motor2();
-		  }
+
+	  if(!etching) {
+		  nextEtchingState = IDLE;
 	  }
 
     /* USER CODE END WHILE */

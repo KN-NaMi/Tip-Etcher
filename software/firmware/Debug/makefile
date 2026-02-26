@@ -68,8 +68,8 @@ all: main-build
 main-build: TipEtcher.elf secondary-outputs
 
 # Tool invocations
-TipEtcher.elf TipEtcher.map: $(OBJS) $(USER_OBJS) C:\Users\pixat\STM32CubeIDE\workspace_1.14.0\TipEtcher\STM32G474CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "TipEtcher.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\pixat\STM32CubeIDE\workspace_1.14.0\TipEtcher\STM32G474CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TipEtcher.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+TipEtcher.elf TipEtcher.map: $(OBJS) $(USER_OBJS) C:\Users\clumz\Documents\GitHub\Tip-Etcher\software\firmware\STM32G474CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "TipEtcher.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\clumz\Documents\GitHub\Tip-Etcher\software\firmware\STM32G474CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="TipEtcher.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
