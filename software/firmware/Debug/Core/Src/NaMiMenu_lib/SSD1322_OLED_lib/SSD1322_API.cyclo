@@ -1,0 +1,12 @@
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:23:6:SSD1322_API_command	1
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:35:6:SSD1322_API_data	1
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:47:6:SSD1322_API_init	1
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:104:6:SSD1322_API_set_display_mode	5
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:127:6:SSD1322_API_sleep_on	1
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:136:6:SSD1322_API_sleep_off	1
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:145:6:SSD1322_API_set_contrast	1
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:155:6:SSD1322_API_set_brightness	1
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:176:9:SSD1322_API_custom_grayscale	3
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:193:6:SSD1322_API_default_grayscale	1
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:207:6:SSD1322_API_set_window	1
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_API.c:226:6:SSD1322_API_send_buffer	1
