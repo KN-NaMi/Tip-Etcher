@@ -1,0 +1,9 @@
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_HW_Driver.c:36:6:SSD1322_HW_drive_CS_low	8	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_HW_Driver.c:47:6:SSD1322_HW_drive_CS_high	8	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_HW_Driver.c:58:6:SSD1322_HW_drive_DC_low	8	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_HW_Driver.c:69:6:SSD1322_HW_drive_DC_high	8	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_HW_Driver.c:80:6:SSD1322_HW_drive_RESET_low	8	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_HW_Driver.c:91:6:SSD1322_HW_drive_RESET_high	8	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_HW_Driver.c:102:6:SSD1322_HW_SPI_send_byte	16	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_HW_Driver.c:114:6:SSD1322_HW_SPI_send_array	16	static
+../Core/Src/NaMiMenu_lib/SSD1322_OLED_lib/SSD1322_HW_Driver.c:129:6:SSD1322_HW_msDelay	16	static
