@@ -1,0 +1,95 @@
+BeginElementMap v1
+15 PostfixCount 17
+Edge
+Face
+Vertex
+;:H602,E
+;:H602,F
+;:H-604,E
+;:H-604,F
+;:M;RFI;:H602:7,F
+;:U2;RFI;:H602:8,E
+;:U3;RFI;:H602:8,E
+;:U;RFI;:H602:7,E
+;:U2;RFI;:H602:8,V
+;:U;RFI;:H602:7,V
+;:U2;RFI;:H602:8,V;:L;RFI;:H602:19,F
+;:U2;RFI;:H602:8,V;:L;RFI;:H602:19,F;:L;RFI;:H602:2b,F
+;:H-604,V
+;:H602,V
+
+MapCount 2
+
+ElementMap 1 16 3
+
+Edge
+
+ChildCount 0
+
+NameCount 10
+0
+$#110:2.b 0
+$#110:2.9 0
+$#110:2.a 0
+$#ef.4 0
+$#e4:1.4 0
+$#101:1.4 0
+$#118.6 0
+$#f5:3.6 0
+$#107:3.6.f5.fc 0
+
+Face
+
+ChildCount 0
+
+NameCount 10
+0
+$#114:2.e 0
+$#10e:2.8 0
+$#116:2.f 0
+$#eb:1.5 0
+$#e9:1.5 0
+$#103:1.5 0
+$#fc:3.7.f5 0
+$#fa:3.7.f5 0
+$#109:3.7.f5.fa 0
+
+Vertex
+
+ChildCount 0
+
+NameCount 7
+0
+$#112:2.d 0
+$#112:2.c 0
+$#e6.11 0
+$#f2.11 0
+$#f8.10 0
+$#11c.10 0
+
+EndMap
+
+ElementMap 2 15 3
+
+Edge
+
+ChildCount 1
+1 0 9 1540 1 ;:H604,E 0
+
+NameCount 0
+
+Face
+
+ChildCount 1
+1 0 9 1540 1 ;:H604,F 0
+
+NameCount 0
+
+Vertex
+
+ChildCount 1
+1 0 6 1540 1 ;:H604,V 0
+
+NameCount 0
+
+EndMap

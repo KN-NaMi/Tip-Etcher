@@ -1,0 +1,96 @@
+BeginElementMap v1
+38 PostfixCount 11
+Edge
+Face
+Vertex
+;:G;XTR;:H657:7,F
+;FAC;:H657:4,F
+;:G;XTR;:H657:7,E
+;:G0;XTR;:H657:8,F
+;:U;XTR;:H657:7,E
+;:U;XTR;:H657:7,V
+;SKT;:H657,E
+;SKT;:H657,V
+
+MapCount 1
+
+ElementMap 1 38 3
+
+Edge
+
+ChildCount 0
+
+NameCount 25
+0
+$#8af.6 0
+;g263.a 0
+$#8bc:107.8.8ad 0
+$#8b0.6 0
+;e234.a 0
+$#8bd:ea.8.8b8 0
+$#8b1.6 0
+;g264.a 0
+$#8bc:108.8.8ad 0
+$#8b2.6 0
+;e262.a 0
+$#8bd:106.8.8b8 0
+$#8b3.6 0
+;g265.a 0
+$#8bc:109.8.8ad 0
+$#8b4.6 0
+;e140.a 0
+$#8bd:8c.8.8b8 0
+$#8b5.6 0
+;g266.a 0
+$#8bc:10a.8.8ad 0
+$#8b6.6 0
+;e213.a 0
+$#8bd:d5.8.8b8 0
+
+Face
+
+ChildCount 0
+
+NameCount 17
+0
+$#8ad:107.4 0
+$#8b8:ea.4 0
+$#8ad:107.5 0
+$#8ba:107.7.8ad 0
+$#8ad:108.4 0
+$#8b8:106.4 0
+$#8ad:108.5 0
+$#8ba:108.7.8ad 0
+$#8ad:109.4 0
+$#8b8:8c.4 0
+$#8ad:109.5 0
+$#8ba:109.7.8ad 0
+$#8ad:10a.4 0
+$#8b8:d5.4 0
+$#8ad:10a.5 0
+$#8ba:10a.7.8ad 0
+
+Vertex
+
+ChildCount 0
+
+NameCount 17
+0
+;g263v1.b 0
+$#8d5.9 0
+;e234v1.b 0
+$#8d6.9 0
+;g264v1.b 0
+$#8d7.9 0
+;e262v1.b 0
+$#8d8.9 0
+;g265v1.b 0
+$#8d9.9 0
+;e140v1.b 0
+$#8da.9 0
+;g266v1.b 0
+$#8db.9 0
+;e213v1.b 0
+$#8dc.9 0
+
+EndMap
