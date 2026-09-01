@@ -1,8 +1,8 @@
-**# 3D Model**
+**#3D Model**
 
 *This folder contains the 3D model files for the Tip Etcher assembly. These models are useful for visualization, 3D printing, and mechanical integration.*
 
-**## 🔧 FreeCAD Installation and 3D Model Preview**
+**##🔧 FreeCAD Installation and 3D Model Preview**
 
 1. **Download the Installer:** Choose the latest stable release.
 Go to the official [FreeCAD Downloads](https://www.freecad.org/downloads.php) page and download the version for your operating system (Windows, macOS, or Linux).
