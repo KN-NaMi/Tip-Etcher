@@ -1,0 +1,14 @@
+==============================================================>> Parts for 3D printing <<==============================================================
+In case of custom elements out team recommends using some additive technology (read 3D printing) in that case, we show name of part in the assembly or path to already exported STL file.
+Mounting:
+	- 2x l-mount-no-top ==> ../portfolio/mountNoTop.stl
+	- 2x corner-mount ==> ../portfolio/mountCorner.stl
+	
+==============================================================>> Only for presentation <<==============================================================
+# Here are not custom part's we recommend them to buy, or in case presentation only prototype also print. #
+Aluimnium Profiles: 
+	- 2x 2020_250mm* ==> ../portfolio/AluminiumProfile2020x250mm.stl
+	- 4x 2020_150mm* ==> ../portfolio/AluminiumProfile2020x150mm.stl
+Aluminium Profiles Mounting System:
+	- 6x T-slot-nut ==> ../portfolio/tSlotNut.stl
+	
