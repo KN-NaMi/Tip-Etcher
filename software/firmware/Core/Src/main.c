@@ -74,8 +74,8 @@ uint16_t var_depth    = 5000; // um
 uint16_t var_step     = 20;   // um
 uint16_t var_polishTime = 0; // ms
 
-uint16_t etchTime_cnt = 0;
-uint16_t stepTime_cnt = 0;
+uint64_t etchTime_cnt = 0;
+uint64_t stepTime_cnt = 0;
 
 uint16_t polishTime_cnt = 0;
 int etchStartPosition = 0;
@@ -614,7 +614,7 @@ int main(void)
   NAL_NaMiMenu_setMenuStates(states, sizeof(states) / sizeof(State));
   NAL_NaMiMenu_Encoder_setup(ENCODER_BTN_GPIO_Port, ENCODER_BTN_Pin, ENCODER_SIGA_GPIO_Port, ENCODER_SIGA_Pin, ENCODER_SIGB_GPIO_Port, ENCODER_SIGB_Pin);
 
-  NAL_NaMiMenu_splash_screen("Tip Etcher", "v2.2 | in dev");
+  NAL_NaMiMenu_splash_screen("Tip Etcher", "v2.3.0 | in dev");
 
   // Device initialization
 
