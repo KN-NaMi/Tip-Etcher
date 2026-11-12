@@ -1,1 +1,1 @@
-//! Menu and user-interface behavior.
+//! Pin-independent menu state and rendering behavior.

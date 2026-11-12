@@ -21,17 +21,17 @@ use panic_halt as _;
 use panic_probe as _;
 
 mod app;
-mod board;
+pub mod board;
 pub mod components;
 mod config;
 
 // Alias for our HAL crate
 use hal::entry;
 
-#[cfg(rp2350)]
+#[cfg(target_arch = "riscv32")]
 use rp235x_hal as hal;
 
-#[cfg(rp2040)]
+#[cfg(target_arch = "arm")]
 use rp2040_hal as hal;
 
 // use bsp::entry;
@@ -44,14 +44,31 @@ use rp2040_hal as hal;
 /// as the BSPs already perform this step.
 #[unsafe(link_section = ".boot2")]
 #[used]
-#[cfg(rp2040)]
+#[cfg(target_arch = "arm")]
 pub static BOOT2: [u8; 256] = rp2040_boot2::BOOT_LOADER_W25Q080;
 
 /// Tell the Boot ROM about our application
 #[unsafe(link_section = ".start_block")]
 #[used]
-#[cfg(rp2350)]
+#[cfg(target_arch = "riscv32")]
 pub static IMAGE_DEF: hal::block::ImageDef = hal::block::ImageDef::secure_exe();
+
+fn initialize() {
+    // HAL_Init();
+    // SystemClock_Config()
+    // MX_GPIO_Init();
+    // MX_SPI2_Init();
+    // MX_TIM2_Init();
+    // MX_I2C1_Init();
+
+    // Test led?
+    // init htim2 global struct
+    // Screen Init:
+    //  pins
+    //  init menu states
+    //  screen encoder?
+    // INA219_Init();
+}
 
 /// Entry point to our bare-metal application.
 ///
@@ -69,36 +86,32 @@ fn main() -> ! {
     let mut watchdog = hal::Watchdog::new(pac.WATCHDOG);
 
     // Configure the clocks
-    let clocks = hal::clocks::init_clocks_and_plls(
-        config::XTAL_FREQ_HZ,
-        pac.XOSC,
-        pac.CLOCKS,
-        pac.PLL_SYS,
-        pac.PLL_USB,
-        &mut pac.RESETS,
-        &mut watchdog,
-    )
-    .unwrap();
+    let clocks = hal::clocks
+        ::init_clocks_and_plls(
+            config::XTAL_FREQ_HZ,
+            pac.XOSC,
+            pac.CLOCKS,
+            pac.PLL_SYS,
+            pac.PLL_USB,
+            &mut pac.RESETS,
+            &mut watchdog
+        )
+        .unwrap();
 
-    #[cfg(rp2040)]
+    #[cfg(target_arch = "arm")]
     let mut timer = hal::Timer::new(pac.TIMER, &mut pac.RESETS, &clocks);
 
-    #[cfg(rp2350)]
+    #[cfg(target_arch = "riscv32")]
     let mut timer = hal::Timer::new_timer0(pac.TIMER0, &mut pac.RESETS, &clocks);
 
     // The single-cycle I/O block controls our GPIO pins
     let sio = hal::Sio::new(pac.SIO);
 
-    // Set up board GPIOs. Physical pin assignments live in board.rs.
-    let pins = hal::gpio::Pins::new(
-        pac.IO_BANK0,
-        pac.PADS_BANK0,
-        sio.gpio_bank0,
-        &mut pac.RESETS,
-    );
-    let board_pins = board::configure(pins);
+    // GPIO25 is a temporary bring-up pin; project pin assignments live in board.rs.
+    let pins = hal::gpio::Pins::new(pac.IO_BANK0, pac.PADS_BANK0, sio.gpio_bank0, &mut pac.RESETS);
+    let blinky_pins = board::configure_blinky(pins);
 
-    app::blinky::run(board_pins.led, &mut timer) // replace this with the program
+    app::blinky::run(blinky_pins.led, &mut timer) // replace this with the program
 
     /*
     Init
